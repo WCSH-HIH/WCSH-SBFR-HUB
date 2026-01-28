@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - WCSH SBFR Report Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 15px 60px rgba(0,0,0,0.15);
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #ff6f00, #ff8f00, #1976d2, #2196f3);
+        }
+
+        .lock-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            color: #1976d2;
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.1);
+        }
+
+        .login-button {
+            background: linear-gradient(145deg, #ff6f00, #ff8f00);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 111, 0, 0.4);
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 111, 0, 0.6);
+        }
+
+        .login-button:active {
+            transform: translateY(-1px);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: #ff6f00;
+            transform: translateX(-5px);
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c62828;
+            display: none;
+            text-align: left;
+            font-size: 0.95em;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.95em;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            box-shadow: 0 -4px 20px rgba(25, 118, 210, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .lock-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5em;
+            }
+
+            .login-button {
+                padding: 16px 40px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="lock-icon">🔒</div>
+        
+        <h1>Secure Access</h1>
+        <p class="subtitle">Enter password to access the Report Hub</p>
+
+        <div class="error-message" id="errorMessage">
+            ❌ Incorrect password. Please try again.
+        </div>
+
+        <form onsubmit="checkPassword(event)">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="off"
+                >
+            </div>
+
+            <button type="submit" class="login-button">
+                🔓 LOGIN
+            </button>
+        </form>
+
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+    <footer>
+        Developed by WCSH HEALTH INNOVATION HUB
+    </footer>
+
+    <script>
+        // ============================================
+        // PASSWORD CONFIGURATION
+        // ============================================
+        // CHANGE THIS TO YOUR DESIRED PASSWORD
+        const SYSTEM_PASSWORD = 'WCSHSBFR2026';
+
+        function checkPassword(event) {
+            event.preventDefault();
+            
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('errorMessage');
+            const enteredPassword = passwordInput.value;
+
+            if (enteredPassword === SYSTEM_PASSWORD) {
+                // Correct password - redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                // Wrong password - show error
+                errorMessage.classList.add('show');
+                passwordInput.value = '';
+                passwordInput.focus();
+
+                // Hide error after 3 seconds
+                setTimeout(() => {
+                    errorMessage.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Clear error message when user starts typing
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('errorMessage').classList.remove('show');
+        });
+    </script>
+</body>
+</html>

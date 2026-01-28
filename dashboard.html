@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - WCSH SBFR Report Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(25, 118, 210, 0.3);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #1976d2;
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-left: 6px solid #ff6f00;
+        }
+
+        .welcome-section h2 {
+            color: #ff6f00;
+            font-size: 2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .welcome-section p {
+            color: #555;
+            font-size: 1.15em;
+            line-height: 1.8;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #1976d2, #2196f3);
+            transition: height 0.3s ease;
+        }
+
+        .tool-card.admin::before {
+            background: linear-gradient(90deg, #ff6f00, #ff8f00);
+        }
+
+        .tool-card.clinical::before {
+            background: linear-gradient(90deg, #1976d2, #2196f3);
+        }
+
+        .tool-card.nonclinical::before {
+            background: linear-gradient(90deg, #388e3c, #4caf50);
+        }
+
+        .tool-card.gaps::before {
+            background: linear-gradient(90deg, #d32f2f, #f44336);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        }
+
+        .tool-card:hover::before {
+            height: 100%;
+        }
+
+        .tool-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tool-card.admin .tool-icon {
+            background: linear-gradient(135deg, #ff6f00, #ff8f00);
+            box-shadow: 0 10px 30px rgba(255, 111, 0, 0.3);
+        }
+
+        .tool-card.clinical .tool-icon {
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.3);
+        }
+
+        .tool-card.nonclinical .tool-icon {
+            background: linear-gradient(135deg, #388e3c, #4caf50);
+            box-shadow: 0 10px 30px rgba(56, 142, 60, 0.3);
+        }
+
+        .tool-card.gaps .tool-icon {
+            background: linear-gradient(135deg, #d32f2f, #f44336);
+            box-shadow: 0 10px 30px rgba(211, 47, 47, 0.3);
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: scale(1.15) rotateY(360deg);
+        }
+
+        .tool-card h3 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .tool-card:hover h3 {
+            color: white;
+        }
+
+        .tool-card p {
+            color: #666;
+            font-size: 1em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .tool-card:hover p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .open-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: rgba(25, 118, 210, 0.1);
+            color: #1976d2;
+            border: 2px solid #1976d2;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tool-card:hover .open-button {
+            background: white;
+            color: #1976d2;
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .info-banner {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ff6f00;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .info-banner h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .info-banner p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1em;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 40px;
+            font-size: 0.95em;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 30px rgba(25, 118, 210, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .subtitle {
+                font-size: 0.95em;
+            }
+
+            .logout-btn {
+                position: static;
+                display: block;
+                margin-top: 20px;
+                width: 100%;
+            }
+
+            .welcome-section {
+                padding: 25px 20px;
+            }
+
+            .welcome-section h2 {
+                font-size: 1.5em;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .tool-card {
+                padding: 30px 20px;
+            }
+
+            .tool-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5em;
+            }
+
+            .tool-card h3 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            <h1>SBFR REPORT HUB</h1>
+            <p class="subtitle">Quality Management Dashboard</p>
+        </header>
+
+        <!-- WELCOME SECTION -->
+        <div class="welcome-section">
+            <h2>👋 Welcome to the SBFR Report Hub</h2>
+            <p>
+                This is your centralized platform for managing System Bottleneck Focused Reform (SBFR) reports. 
+                Access all submission sheets, review daily reports from all teams, and manage the ongoing issues tracker. 
+                Use the tools below to monitor quality improvement initiatives across WCSH.
+            </p>
+        </div>
+
+        <div class="info-banner">
+            <h3>📌 Quick Guide</h3>
+            <p>
+                Click on any card below to open the corresponding Google Sheet. The sheets are linked to their respective 
+                Google Forms and update automatically. The <strong>Recognized Gaps Tool</strong> allows you to add/remove 
+                ongoing issues that will appear on the public SBFR website.
+            </p>
+        </div>
+
+        <!-- TOOLS GRID -->
+        <div class="tools-grid">
+            <!-- ADMIN SHEET -->
+            <div class="tool-card admin" onclick="openSheet('admin')">
+                <div class="tool-icon">👔</div>
+                <h3>Admin Report Submission Sheet</h3>
+                <p>View and manage all administrative team reports submitted through the SBFR system</p>
+                <span class="open-button">Open Sheet →</span>
+            </div>
+
+            <!-- CLINICAL SHEET -->
+            <div class="tool-card clinical" onclick="openSheet('clinical')">
+                <div class="tool-icon">⚕️</div>
+                <h3>Clinical Report Submission Sheet</h3>
+                <p>Access clinical team reports including all department submissions and evaluations</p>
+                <span class="open-button">Open Sheet →</span>
+            </div>
+
+            <!-- NON-CLINICAL SHEET -->
+            <div class="tool-card nonclinical" onclick="openSheet('nonclinical')">
+                <div class="tool-icon">🔧</div>
+                <h3>Non-Clinical Report Submission Sheet</h3>
+                <p>Review non-clinical operations reports covering facilities, logistics, and support services</p>
+                <span class="open-button">Open Sheet →</span>
+            </div>
+
+            <!-- RECOGNIZED GAPS TOOL -->
+            <div class="tool-card gaps" onclick="openSheet('gaps')">
+                <div class="tool-icon">🚨</div>
+                <h3>Recognized Gaps Reporting Tool</h3>
+                <p>Manage ongoing hospital issues - add new persistent problems or mark issues as resolved</p>
+                <span class="open-button">Open Sheet →</span>
+            </div>
+        </div>
+
+        <footer>
+            Developed by WCSH HEALTH INNOVATION HUB
+        </footer>
+    </div>
+
+    <script>
+        // ============================================
+        // GOOGLE SHEETS CONFIGURATION
+        // ============================================
+        // Replace these with your actual Google Sheet URLs
+        const SHEET_URLS = {
+            admin: 'https://docs.google.com/spreadsheets/d/1qKeokIY-IwqfMCxAc0MYRywcp6esBRbrJkmFKf9s01U/edit?resourcekey=&gid=1095912585#gid=1095912585',
+            clinical: 'https://docs.google.com/spreadsheets/d/1IetFlMx3aXKdbE-1OLT5NEjsAGuenoPmRble0AY_p64/edit?resourcekey=&gid=1317569837#gid=1317569837',
+            nonclinical: 'https://docs.google.com/spreadsheets/d/1GX6TauS_TOnUjOjbRWkbZxuHkc_Glwv2QAoJ8LGP0MM/edit?resourcekey=&gid=2118081123#gid=2118081123',
+            gaps: 'https://docs.google.com/spreadsheets/d/1G7gdPHlvFzAb2ileTDnpSb_6HE7npoUHTdoHR_mLcOw/edit?gid=0#gid=0'
+        };
+
+        function openSheet(sheetType) {
+            const url = SHEET_URLS[sheetType];
+            
+            if (url && url !== 'YOUR_ADMIN_SHEET_URL_HERE' && 
+                url !== 'YOUR_CLINICAL_SHEET_URL_HERE' && 
+                url !== 'YOUR_NONCLINICAL_SHEET_URL_HERE' && 
+                url !== 'YOUR_GAPS_SHEET_URL_HERE') {
+                // Open in new tab
+                window.open(url, '_blank');
+            } else {
+                alert('⚠️ Sheet URL not configured yet!\n\nPlease update the SHEET_URLS object in the code with your Google Sheet URLs.\n\nSee the setup instructions for details.');
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Prevent back button after login (optional security feature)
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, null, window.location.href);
+        };
+    </script>
+</body>
+</html>
